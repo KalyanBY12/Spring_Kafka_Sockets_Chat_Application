@@ -21,10 +21,20 @@ import java.util.Map;
 @Configuration
 public class ConsumerConfiguration {
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Message> kafkaListenerContainerFactory(){
-        ConcurrentKafkaListenerContainerFactory<String,Message> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory());
-        return factory;
+    public Map<String, Object> consumerConfig( ){
+
+//        public static final String TOPIC = "messenger";
+//        public static final String GROUP_ID = "messenger_SandBox";
+//        public static final String BROKER = "localhost:9092"; // KAFKA BROKER
+
+        Map<String,Object> config = new HashMap<>();
+        //
+        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaConstant.BROKER);
+        config.put(ConsumerConfig.GROUP_ID_CONFIG,KafkaConstant.GROUP_ID);
+        config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+        config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,"latest");
+        return config;
     }
 
     @Bean
@@ -37,13 +47,13 @@ public class ConsumerConfiguration {
     }
 
     @Bean
-    public Map<String, Object> consumerConfig( ){
-        Map<String,Object> config = new HashMap<>();
-        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaConstant.BROKER);
-        config.put(ConsumerConfig.GROUP_ID_CONFIG,KafkaConstant.GROUP_ID);
-        config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,"latest");
-        return config;
+    public ConcurrentKafkaListenerContainerFactory<String, Message> kafkaListenerContainerFactory(){
+        ConcurrentKafkaListenerContainerFactory<String,Message> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(consumerFactory());
+        return factory;
     }
+
+
+
+
 }

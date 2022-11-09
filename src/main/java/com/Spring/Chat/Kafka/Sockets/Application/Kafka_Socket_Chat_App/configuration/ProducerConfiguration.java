@@ -19,12 +19,7 @@ import java.util.Map;
 @EnableKafka
 @Configuration
 public class ProducerConfiguration {
-    @Bean
-    public ProducerFactory<String, Message> producerFactory(){
-        return new DefaultKafkaProducerFactory<>(
-                producerConfig()
-        );
-    }
+
     @Bean
     public Map<String, Object> producerConfig( ){
         Map<String,Object> config = new HashMap<>();
@@ -33,6 +28,14 @@ public class ProducerConfiguration {
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         return config;
     }
+
+    @Bean
+    public ProducerFactory<String, Message> producerFactory(){
+        return new DefaultKafkaProducerFactory<>(
+                producerConfig()
+        );
+    }
+
 
     @Bean
     public KafkaTemplate<String,Message> kafkaTemplate(){
